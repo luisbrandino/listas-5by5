@@ -1,17 +1,14 @@
 ﻿namespace Lista
 {
-    internal class OrderedList<T> where T : IComparable
+    internal class OrderedList<T> : List<T> where T : IComparable
     {
-        Node<T>? head = null;
-        Node<T>? rear = null;
-
-        public void Add(T item)
+        public override void Add(T item)
         {
             Node<T> node = new Node<T>(item);
 
             if (this.head == null)
             {
-                this.head = this.rear = node;
+                InsertBeforeHead(node);
                 return;
             }
 
@@ -19,8 +16,7 @@
 
             if (comparison >= 0)
             {
-                node.SetNext(this.head);
-                this.head = node;
+                InsertBeforeHead(node);
                 return;
             }
 
@@ -32,29 +28,15 @@
 
                 if (comparison >= 0)
                 {
-                    node.SetNext(current.Next());
-                    current.SetNext(node);
-
+                    InsertAfter(current, node);
                     return;
                 }
 
                 current = current.Next();
             }
 
-            this.rear?.SetNext(node);
+            InsertAfter(rear, node);
             this.rear = node;
-        }
-
-        public void Display()
-        {
-            Node<T>? current = this.head;
-
-            while (current != null)
-            {
-                Console.Write($"{current.GetData()} ");
-
-                current = current.Next();
-            }
         }
 
     }
